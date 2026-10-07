@@ -1,0 +1,38 @@
+# Spark / Airflow
+.venv/
+.venv-p2/
+airflow.log
+logs/
+logs.py
+airflow-webserver_config.py
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.ivy2/
+
+# Airflow metadata + local state
+.airflow/
+airflow.db
+airflow.db-journal
+
+# Warehouse - the Delta tables themselves, several hundred MB, and rebuilt by
+# the pipeline. LAKEHOUSE_ROOT defaults to /root/lakehouse (WSL ext4) rather
+# than here. The leading slash anchors it to the repo root: without it, the
+# bare name also matches src/lakehouse/ and excludes the entire pipeline.
+/lakehouse/
+spark-warehouse/
+*.parquet
+
+# Raw data - fetched by scripts/fetch_data.py, not committed.
+# The correction batch is regenerated deterministically by
+# scripts/make_corrections.py, so it is reproducible rather than downloaded.
+data/raw/
+
+# Env
+.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

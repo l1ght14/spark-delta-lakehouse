@@ -1,0 +1,13 @@
+# Pinned deliberately, and the pins are not arbitrary.
+#
+# Airflow 2.10.5's official constraints file pins pyspark==3.5.4. delta-spark
+# 3.3.0 requires pyspark>=3.5.3,<3.6.0, so 3.5.4 is the one version that satisfies
+# both. delta-spark 4.x needs pyspark>=4.0.0 and would fight Airflow's pin, which
+# is why this project sits on the Spark 3.5 line rather than the newest.
+#
+# The constraint file is applied at install time, not listed here - it is a file
+# (constraints-3.12.txt), not a distributable package, so installing it by name
+# fails.
+apache-airflow==2.10.5
+pyspark==3.5.4
+delta-spark==3.3.0
