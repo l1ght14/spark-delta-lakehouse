@@ -46,31 +46,53 @@ def test_table_paths_are_namespaced_under_the_warehouse_root():
         assert path.name == name
 
 
+def _ensure_raw_data() -> None:
+    """Make sure data/raw exists before a test that reads or generates from it.
+
+    data/raw is gitignored, so a fresh clone has nothing there. Two of these
+    tests used to fail on a reviewer's first `pytest` run because they assumed
+    a file that only existed in the development checkout - which is exactly the
+    kind of thing that makes a repo look unmaintained.
+    """
+    if not config.RATINGS_CSV.exists():
+        import fetch_data
+
+        assert fetch_data.main() == 0
+
+
 def test_corrections_are_deterministic():
-    """Same seed must produce a byte-identical file.
+    """Two consecutive generations must be byte-identical.
 
     A correction batch that changed between runs would make the MERGE
     demonstration unreproducible and any row-count comparison meaningless.
     """
+    _ensure_raw_data()
+
     import make_corrections
 
+    assert make_corrections.main() == 0
     first = config.CORRECTIONS_CSV.read_bytes()
+
     assert make_corrections.main() == 0
     second = config.CORRECTIONS_CSV.read_bytes()
+
     assert first == second, "correction generator is not deterministic"
+    assert first, "correction generator produced an empty file"
 
 
 def test_corrections_inject_exactly_what_the_pipeline_expects():
     """The generator and the pipeline must agree on the bad-row counts.
 
-    These two numbers are load-bearing: the quality gate asserts quarantine is
+    These numbers are load-bearing: the quality gate asserts quarantine is
     non-empty precisely because these rows exist, and the README quotes them.
     """
     import csv
 
     import make_corrections
 
-    make_corrections.main()
+    _ensure_raw_data()
+    assert make_corrections.main() == 0
+
     with open(config.CORRECTIONS_CSV, encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
 
