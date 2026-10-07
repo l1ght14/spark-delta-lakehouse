@@ -2,11 +2,11 @@
 # Run a python entrypoint in the project venv, stripping Spark's log noise.
 set -uo pipefail
 
-PROJ=/mnt/d/projects/Data_Engineer/spark-delta-lakehouse
+PROJ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJ"
 
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-export LAKEHOUSE_ROOT="${LAKEHOUSE_ROOT:-/root/lakehouse}"
+export LAKEHOUSE_ROOT="${LAKEHOUSE_ROOT:-$HOME/lakehouse}"
 
 # Workers must run the SAME interpreter as the driver. Ubuntu 26.04 ships
 # python3.14 system-wide while the venv is 3.12 (pinned for Airflow), so

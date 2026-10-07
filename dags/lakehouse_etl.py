@@ -25,13 +25,16 @@ Design decisions worth defending:
 """
 
 import os
+import pathlib
 import sys
 from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-PROJECT_ROOT = os.environ.get("LAKEHOUSE_PROJECT_ROOT", "/mnt/d/projects/Data_Engineer/spark-delta-lakehouse")
+PROJECT_ROOT = os.environ.get("LAKEHOUSE_PROJECT_ROOT") or str(
+    pathlib.Path(__file__).resolve().parents[1]
+)
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 

@@ -165,10 +165,14 @@ bash scripts/test.sh slow                           # + Spark integration, ~3min
 ### A note on where the data lives
 
 The **code** is on `/mnt/d` so `git` works from Windows. The **warehouse** is on
-WSL-native ext4 (`/root/lakehouse`), because Delta commits by writing a JSON file
-into `_delta_log` and renaming it — that needs atomic rename plus consistent
-directory listing, and the DrvFs mount under `/mnt/d` does not reliably provide
-either. Override with `LAKEHOUSE_ROOT` if you want it elsewhere.
+WSL-native ext4 (`~/lakehouse`, outside the project directory), because Delta
+commits by writing a JSON file into `_delta_log` and renaming it — that needs
+atomic rename plus consistent directory listing, and the DrvFs mount under
+`/mnt/d` does not reliably provide either. Override either with
+`LAKEHOUSE_ROOT`.
+
+Every script derives its own location, so the repo runs from any path on any
+Linux or WSL machine — nothing is hardcoded.
 
 ---
 

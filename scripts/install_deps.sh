@@ -5,7 +5,7 @@ set -euo pipefail
 export PATH="$HOME/.local/bin:$PATH"
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
-PROJ=/mnt/d/projects/Data_Engineer/spark-delta-lakehouse
+PROJ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJ"
 
 CONSTRAINTS="$PROJ/constraints-3.12.txt"

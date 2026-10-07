@@ -10,9 +10,15 @@ reliably provide either. The code stays on /mnt/d so git works from Windows.
 import os
 import pathlib
 
-# WSL-native ext4 by default. Override with LAKEHOUSE_ROOT to move it.
+# Warehouse root. Deliberately OUTSIDE the project directory and NOT on a
+# Windows/DrvFs mount when running under WSL: Delta commits by writing a JSON
+# file into _delta_log and renaming it, which needs atomic rename plus consistent
+# directory listing, and /mnt/d does not reliably provide either.
+#
+# Defaults to ~/lakehouse rather than /root/lakehouse so the repo runs for any
+# user, not just root. Override with LAKEHOUSE_ROOT.
 LAKEHOUSE_ROOT = pathlib.Path(
-    os.environ.get("LAKEHOUSE_ROOT", "/root/lakehouse")
+    os.environ.get("LAKEHOUSE_ROOT", pathlib.Path.home() / "lakehouse")
 ).expanduser()
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[2]

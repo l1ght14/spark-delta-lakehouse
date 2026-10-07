@@ -8,7 +8,7 @@
 # the DAG works.
 set -uo pipefail
 
-PROJ=/mnt/d/projects/Data_Engineer/spark-delta-lakehouse
+PROJ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJ"
 
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
@@ -16,7 +16,7 @@ export AIRFLOW_HOME="$PROJ/.airflow"
 export AIRFLOW__CORE__LOAD_EXAMPLES=False
 export AIRFLOW__CORE__DAGS_FOLDER="$PROJ/dags"
 export AIRFLOW__DATABASE__SQL_ALCHEMY_CONN="sqlite:///$PROJ/.airflow/airflow.db"
-export LAKEHOUSE_ROOT="${LAKEHOUSE_ROOT:-/root/lakehouse}"
+export LAKEHOUSE_ROOT="${LAKEHOUSE_ROOT:-$HOME/lakehouse}"
 export PYTHONPATH="$PROJ"
 export PYSPARK_PYTHON="$PROJ/.venv/bin/python"
 export PYSPARK_DRIVER_PYTHON="$PROJ/.venv/bin/python"
